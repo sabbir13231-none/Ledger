@@ -9,7 +9,14 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app uses your location in the background to automatically track business mileage for tax purposes, helping you maximize your deductions.",
+        "NSLocationWhenInUseUsageDescription": "This app needs access to your location to track your business mileage for tax deductions.",
+        "NSCameraUsageDescription": "This app needs access to your camera to capture receipt photos for expense tracking.",
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to attach receipt images to expenses.",
+        "UIBackgroundModes": ["location"]
+      }
     },
     "android": {
       "adaptiveIcon": {

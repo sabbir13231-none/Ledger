@@ -31,7 +31,7 @@ export default function LoginScreen() {
       <View style={styles.heroSection}>
         <View style={styles.logoContainer}>
           <View style={styles.logoCircle}>
-            <Ionicons name="book" size={48} color="#fff" />
+            <Ionicons name="document-text" size={48} color="#fff" />
           </View>
         </View>
         

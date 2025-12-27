@@ -8,9 +8,10 @@ const { width } = Dimensions.get('window');
 
 type AuthTab = 'google' | 'email' | 'phone';
 
-export default function LoginScreen() {
+export default function WelcomeScreen() {
   const { user, loading, login } = useAuth();
   const router = useRouter();
+  const [showAuth, setShowAuth] = useState(false);
   const [activeTab, setActiveTab] = useState<AuthTab>('google');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,9 +47,195 @@ export default function LoginScreen() {
     );
   }
 
+  if (showAuth) {
+    return (
+      <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
+        {/* Auth Header */}
+        <View style={styles.authHeader}>
+          <TouchableOpacity onPress={() => setShowAuth(false)} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color="#1E3A5F" />
+          </TouchableOpacity>
+          <Image 
+            source={require('../assets/logo.png')}
+            style={styles.authLogo}
+            resizeMode="contain"
+          />
+        </View>
+
+        {/* Auth Tabs */}
+        <View style={styles.authSection}>
+          <View style={styles.tabContainer}>
+            <TouchableOpacity
+              style={[styles.tab, activeTab === 'google' && styles.tabActive]}
+              onPress={() => setActiveTab('google')}
+            >
+              <Ionicons name="logo-google" size={20} color={activeTab === 'google' ? '#14B8A6' : '#6B7280'} />
+              <Text style={[styles.tabText, activeTab === 'google' && styles.tabTextActive]}>Google</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.tab, activeTab === 'email' && styles.tabActive]}
+              onPress={() => setActiveTab('email')}
+            >
+              <Ionicons name="mail" size={20} color={activeTab === 'email' ? '#14B8A6' : '#6B7280'} />
+              <Text style={[styles.tabText, activeTab === 'email' && styles.tabTextActive]}>Email</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.tab, activeTab === 'phone' && styles.tabActive]}
+              onPress={() => setActiveTab('phone')}
+            >
+              <Ionicons name="phone-portrait" size={20} color={activeTab === 'phone' ? '#14B8A6' : '#6B7280'} />
+              <Text style={[styles.tabText, activeTab === 'phone' && styles.tabTextActive]}>Phone</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Google Sign-In */}
+          {activeTab === 'google' && (
+            <View style={styles.formContainer}>
+              <Text style={styles.formTitle}>Sign in with Google</Text>
+              <Text style={styles.formDescription}>
+                Quick and secure sign-in using your Google account
+              </Text>
+
+              <TouchableOpacity style={styles.googleButton} onPress={login}>
+                <Ionicons name="logo-google" size={22} color="#fff" style={styles.buttonIcon} />
+                <Text style={styles.googleButtonText}>Continue with Google</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* Email/Password Sign-In */}
+          {activeTab === 'email' && (
+            <View style={styles.formContainer}>
+              <Text style={styles.formTitle}>Sign in with Email</Text>
+              
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Email Address</Text>
+                <View style={styles.inputContainer}>
+                  <Ionicons name="mail" size={20} color="#6B7280" style={styles.inputIcon} />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="your.email@example.com"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                  />
+                </View>
+              </View>
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Password</Text>
+                <View style={styles.inputContainer}>
+                  <Ionicons name="lock-closed" size={20} color="#6B7280" style={styles.inputIcon} />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry={!showPassword}
+                  />
+                  <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                    <Ionicons 
+                      name={showPassword ? "eye-off" : "eye"} 
+                      size={20} 
+                      color="#6B7280" 
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <TouchableOpacity style={styles.forgotPassword}>
+                <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.actionButton} onPress={handleEmailLogin}>
+                <Text style={styles.actionButtonText}>Sign In</Text>
+              </TouchableOpacity>
+
+              <View style={styles.divider}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>or</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
+              <TouchableOpacity style={styles.secondaryButton}>
+                <Text style={styles.secondaryButtonText}>Create Account</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* Phone/SMS Sign-In */}
+          {activeTab === 'phone' && (
+            <View style={styles.formContainer}>
+              <Text style={styles.formTitle}>Sign in with Phone</Text>
+              <Text style={styles.formDescription}>
+                We'll send you a verification code via SMS
+              </Text>
+
+              {!otpSent ? (
+                <>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Phone Number</Text>
+                    <View style={styles.inputContainer}>
+                      <Ionicons name="phone-portrait" size={20} color="#6B7280" style={styles.inputIcon} />
+                      <TextInput
+                        style={styles.input}
+                        placeholder="+1 (555) 123-4567"
+                        value={phoneNumber}
+                        onChangeText={setPhoneNumber}
+                        keyboardType="phone-pad"
+                      />
+                    </View>
+                  </View>
+
+                  <TouchableOpacity style={styles.actionButton} onPress={handlePhoneLogin}>
+                    <Text style={styles.actionButtonText}>Send Code</Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Enter 6-digit code</Text>
+                    <View style={styles.inputContainer}>
+                      <Ionicons name="keypad" size={20} color="#6B7280" style={styles.inputIcon} />
+                      <TextInput
+                        style={styles.input}
+                        placeholder="123456"
+                        value={otp}
+                        onChangeText={setOtp}
+                        keyboardType="number-pad"
+                        maxLength={6}
+                      />
+                    </View>
+                  </View>
+
+                  <TouchableOpacity style={styles.actionButton} onPress={handlePhoneLogin}>
+                    <Text style={styles.actionButtonText}>Verify Code</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.resendButton}>
+                    <Text style={styles.resendButtonText}>Resend Code</Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+          )}
+        </View>
+
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            By continuing, you agree to our Terms of Service and Privacy Policy
+          </Text>
+        </View>
+      </ScrollView>
+    );
+  }
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
-      {/* Hero Section with Logo */}
+      {/* Hero Section */}
       <View style={styles.heroSection}>
         <Image 
           source={require('../assets/logo.png')}
@@ -56,180 +243,198 @@ export default function LoginScreen() {
           resizeMode="contain"
         />
         
-        <Text style={styles.tagline}>Smart Tax Tracking for 1099 Contractors</Text>
+        <Text style={styles.heroTitle}>Track Every Mile,{'\n'}Maximize Every Deduction</Text>
+        <Text style={styles.heroSubtitle}>
+          The #1 tax tracking app for 1099 contractors, rideshare drivers, and delivery professionals
+        </Text>
         
-        <View style={styles.badge}>
-          <Ionicons name="shield-checkmark" size={16} color="#10B981" />
-          <Text style={styles.badgeText}>IRS Compliant • $0.67/mile</Text>
+        <View style={styles.heroStats}>
+          <View style={styles.heroStat}>
+            <Text style={styles.heroStatNumber}>$12K+</Text>
+            <Text style={styles.heroStatLabel}>Avg. Yearly Savings</Text>
+          </View>
+          <View style={styles.heroStat}>
+            <Text style={styles.heroStatNumber}>100%</Text>
+            <Text style={styles.heroStatLabel}>IRS Compliant</Text>
+          </View>
+          <View style={styles.heroStat}>
+            <Text style={styles.heroStatNumber}>24/7</Text>
+            <Text style={styles.heroStatLabel}>Auto Tracking</Text>
+          </View>
         </View>
       </View>
 
-      {/* Auth Tabs */}
-      <View style={styles.authSection}>
-        <View style={styles.tabContainer}>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'google' && styles.tabActive]}
-            onPress={() => setActiveTab('google')}
-          >
-            <Ionicons name="logo-google" size={20} color={activeTab === 'google' ? '#14B8A6' : '#6B7280'} />
-            <Text style={[styles.tabText, activeTab === 'google' && styles.tabTextActive]}>Google</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'email' && styles.tabActive]}
-            onPress={() => setActiveTab('email')}
-          >
-            <Ionicons name="mail" size={20} color={activeTab === 'email' ? '#14B8A6' : '#6B7280'} />
-            <Text style={[styles.tabText, activeTab === 'email' && styles.tabTextActive]}>Email</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'phone' && styles.tabActive]}
-            onPress={() => setActiveTab('phone')}
-          >
-            <Ionicons name="phone-portrait" size={20} color={activeTab === 'phone' ? '#14B8A6' : '#6B7280'} />
-            <Text style={[styles.tabText, activeTab === 'phone' && styles.tabTextActive]}>Phone</Text>
-          </TouchableOpacity>
+      {/* Key Features */}
+      <View style={styles.featuresSection}>
+        <Text style={styles.sectionTitle}>Everything You Need</Text>
+        
+        <View style={styles.featureCard}>
+          <View style={styles.featureIcon} style={{backgroundColor: '#DBEAFE'}}>
+            <Ionicons name="navigate" size={32} color="#3B82F6" />
+          </View>
+          <View style={styles.featureContent}>
+            <Text style={styles.featureTitle}>Automatic GPS Tracking</Text>
+            <Text style={styles.featureDescription}>
+              Background tracking records every business trip automatically. Set it and forget it!
+            </Text>
+          </View>
         </View>
 
-        {/* Google Sign-In */}
-        {activeTab === 'google' && (
-          <View style={styles.formContainer}>
-            <Text style={styles.formTitle}>Sign in with Google</Text>
-            <Text style={styles.formDescription}>
-              Quick and secure sign-in using your Google account
+        <View style={styles.featureCard}>
+          <View style={styles.featureIcon} style={{backgroundColor: '#D1FAE5'}}>
+            <Ionicons name="camera" size={32} color="#10B981" />
+          </View>
+          <View style={styles.featureContent}>
+            <Text style={styles.featureTitle}>Snap & Track Expenses</Text>
+            <Text style={styles.featureDescription}>
+              Capture receipts instantly. Track fuel, maintenance, insurance, phone bills, and more.
             </Text>
-
-            <TouchableOpacity style={styles.googleButton} onPress={login}>
-              <Ionicons name="logo-google" size={22} color="#fff" style={styles.buttonIcon} />
-              <Text style={styles.googleButtonText}>Continue with Google</Text>
-            </TouchableOpacity>
           </View>
-        )}
+        </View>
 
-        {/* Email/Password Sign-In */}
-        {activeTab === 'email' && (
-          <View style={styles.formContainer}>
-            <Text style={styles.formTitle}>Sign in with Email</Text>
-            
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Email Address</Text>
-              <View style={styles.inputContainer}>
-                <Ionicons name="mail" size={20} color="#6B7280" style={styles.inputIcon} />
-                <TextInput
-                  style={styles.input}
-                  placeholder="your.email@example.com"
-                  value={email}
-                  onChangeText={setEmail}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                />
-              </View>
-            </View>
-
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Password</Text>
-              <View style={styles.inputContainer}>
-                <Ionicons name="lock-closed" size={20} color="#6B7280" style={styles.inputIcon} />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={!showPassword}
-                />
-                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                  <Ionicons 
-                    name={showPassword ? "eye-off" : "eye"} 
-                    size={20} 
-                    color="#6B7280" 
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <TouchableOpacity style={styles.forgotPassword}>
-              <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.actionButton} onPress={handleEmailLogin}>
-              <Text style={styles.actionButtonText}>Sign In</Text>
-            </TouchableOpacity>
-
-            <View style={styles.divider}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>or</Text>
-              <View style={styles.dividerLine} />
-            </View>
-
-            <TouchableOpacity style={styles.secondaryButton}>
-              <Text style={styles.secondaryButtonText}>Create Account</Text>
-            </TouchableOpacity>
+        <View style={styles.featureCard}>
+          <View style={styles.featureIcon} style={{backgroundColor: '#FEF3C7'}}>
+            <Ionicons name="document-text" size={32} color="#F59E0B" />
           </View>
-        )}
-
-        {/* Phone/SMS Sign-In */}
-        {activeTab === 'phone' && (
-          <View style={styles.formContainer}>
-            <Text style={styles.formTitle}>Sign in with Phone</Text>
-            <Text style={styles.formDescription}>
-              We'll send you a verification code via SMS
+          <View style={styles.featureContent}>
+            <Text style={styles.featureTitle}>IRS-Ready Tax Reports</Text>
+            <Text style={styles.featureDescription}>
+              Generate compliant reports for quarterly or annual tax filing. Export to PDF or CSV.
             </Text>
-
-            {!otpSent ? (
-              <>
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Phone Number</Text>
-                  <View style={styles.inputContainer}>
-                    <Ionicons name="phone-portrait" size={20} color="#6B7280" style={styles.inputIcon} />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="+1 (555) 123-4567"
-                      value={phoneNumber}
-                      onChangeText={setPhoneNumber}
-                      keyboardType="phone-pad"
-                    />
-                  </View>
-                </View>
-
-                <TouchableOpacity style={styles.actionButton} onPress={handlePhoneLogin}>
-                  <Text style={styles.actionButtonText}>Send Code</Text>
-                </TouchableOpacity>
-              </>
-            ) : (
-              <>
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Enter 6-digit code</Text>
-                  <View style={styles.inputContainer}>
-                    <Ionicons name="keypad" size={20} color="#6B7280" style={styles.inputIcon} />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="123456"
-                      value={otp}
-                      onChangeText={setOtp}
-                      keyboardType="number-pad"
-                      maxLength={6}
-                    />
-                  </View>
-                </View>
-
-                <TouchableOpacity style={styles.actionButton} onPress={handlePhoneLogin}>
-                  <Text style={styles.actionButtonText}>Verify Code</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.resendButton}>
-                  <Text style={styles.resendButtonText}>Resend Code</Text>
-                </TouchableOpacity>
-              </>
-            )}
           </View>
-        )}
+        </View>
+
+        <View style={styles.featureCard}>
+          <View style={styles.featureIcon} style={{backgroundColor: '#E0E7FF'}}>
+            <Ionicons name="car" size={32} color="#6366F1" />
+          </View>
+          <View style={styles.featureContent}>
+            <Text style={styles.featureTitle}>Multiple Vehicle Support</Text>
+            <Text style={styles.featureDescription}>
+              Track expenses and mileage for all your vehicles. Set business-use percentage per vehicle.
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.featureCard}>
+          <View style={styles.featureIcon} style={{backgroundColor: '#FCE7F3'}}>
+            <Ionicons name="card" size={32} color="#EC4899" />
+          </View>
+          <View style={styles.featureContent}>
+            <Text style={styles.featureTitle}>Bank Account Linking</Text>
+            <Text style={styles.featureDescription}>
+              Connect your bank accounts to automatically categorize business expenses with AI.
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.featureCard}>
+          <View style={styles.featureIcon} style={{backgroundColor: '#DBEAFE'}}>
+            <Ionicons name="analytics" size={32} color="#0EA5E9" />
+          </View>
+          <View style={styles.featureContent}>
+            <Text style={styles.featureTitle}>Real-Time Analytics</Text>
+            <Text style={styles.featureDescription}>
+              Track your miles, expenses, and potential tax savings in real-time on your dashboard.
+            </Text>
+          </View>
+        </View>
+      </View>
+
+      {/* IRS Compliance Badge */}
+      <View style={styles.complianceSection}>
+        <View style={styles.complianceBadge}>
+          <Ionicons name="shield-checkmark" size={48} color="#10B981" />
+          <View style={styles.complianceText}>
+            <Text style={styles.complianceTitle}>IRS Compliant Tracking</Text>
+            <Text style={styles.complianceDescription}>
+              2025 Standard Rate: $0.67 per mile
+            </Text>
+            <Text style={styles.complianceDescription}>
+              Meets all IRS requirements for mileage logs
+            </Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Perfect For */}
+      <View style={styles.audienceSection}>
+        <Text style={styles.sectionTitle}>Perfect For</Text>
+        <View style={styles.audienceGrid}>
+          <View style={styles.audienceCard}>
+            <Ionicons name="car" size={32} color="#3B82F6" />
+            <Text style={styles.audienceTitle}>Rideshare</Text>
+            <Text style={styles.audienceText}>Uber, Lyft drivers</Text>
+          </View>
+          <View style={styles.audienceCard}>
+            <Ionicons name="bicycle" size={32} color="#10B981" />
+            <Text style={styles.audienceTitle}>Delivery</Text>
+            <Text style={styles.audienceText}>DoorDash, Instacart</Text>
+          </View>
+          <View style={styles.audienceCard}>
+            <Ionicons name="bus" size={32} color="#F59E0B" />
+            <Text style={styles.audienceTitle}>Taxi</Text>
+            <Text style={styles.audienceText}>Independent cabs</Text>
+          </View>
+          <View style={styles.audienceCard}>
+            <Ionicons name="briefcase" size={32} color="#8B5CF6" />
+            <Text style={styles.audienceTitle}>Contractors</Text>
+            <Text style={styles.audienceText}>Any 1099 worker</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Pricing Preview */}
+      <View style={styles.pricingSection}>
+        <Text style={styles.sectionTitle}>Choose Your Plan</Text>
+        <View style={styles.pricingCards}>
+          <View style={styles.pricingCard}>
+            <Text style={styles.pricingPlan}>Basic</Text>
+            <Text style={styles.pricingPrice}>Free</Text>
+            <Text style={styles.pricingFeature}>✓ Manual tracking</Text>
+            <Text style={styles.pricingFeature}>✓ Basic reports</Text>
+            <Text style={styles.pricingFeature}>✓ 1 vehicle</Text>
+          </View>
+          <View style={[styles.pricingCard, styles.pricingCardPopular]}>
+            <View style={styles.popularBadge}>
+              <Text style={styles.popularBadgeText}>POPULAR</Text>
+            </View>
+            <Text style={styles.pricingPlan}>Mid-Tier</Text>
+            <Text style={styles.pricingPrice}>$4.99/mo</Text>
+            <Text style={styles.pricingFeature}>✓ Auto GPS tracking</Text>
+            <Text style={styles.pricingFeature}>✓ Receipt photos</Text>
+            <Text style={styles.pricingFeature}>✓ Up to 3 vehicles</Text>
+          </View>
+          <View style={styles.pricingCard}>
+            <Text style={styles.pricingPlan}>Premium</Text>
+            <Text style={styles.pricingPrice}>$12.99/mo</Text>
+            <Text style={styles.pricingFeature}>✓ Everything in Mid</Text>
+            <Text style={styles.pricingFeature}>✓ PDF/CSV export</Text>
+            <Text style={styles.pricingFeature}>✓ Unlimited vehicles</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* CTA Section */}
+      <View style={styles.ctaSection}>
+        <Text style={styles.ctaTitle}>Ready to Save on Taxes?</Text>
+        <Text style={styles.ctaSubtitle}>Join thousands of drivers maximizing their deductions</Text>
+        
+        <TouchableOpacity style={styles.ctaButton} onPress={() => setShowAuth(true)}>
+          <Text style={styles.ctaButtonText}>Get Started Free</Text>
+          <Ionicons name="arrow-forward" size={20} color="#fff" />
+        </TouchableOpacity>
+        
+        <Text style={styles.ctaNote}>No credit card required • Free plan available</Text>
       </View>
 
       {/* Footer */}
-      <View style={styles.footer}>
+      <View style={styles.footerSection}>
         <Text style={styles.footerText}>
-          By continuing, you agree to our Terms of Service and Privacy Policy
+          Made for 1099 contractors to maximize tax deductions
+        </Text>
+        <Text style={styles.footerDisclaimer}>
+          Not tax advice. Consult with a tax professional for your specific situation.
         </Text>
       </View>
     </ScrollView>

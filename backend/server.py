@@ -5,13 +5,17 @@ from starlette.middleware.cors import CORSMiddleware
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from typing import List, Optional
 import uuid
 from datetime import datetime, timezone, timedelta
 import asyncpg
 import httpx
 from contextlib import asynccontextmanager
+from passlib.context import CryptContext
+from jose import JWTError, jwt
+import random
+import string
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')

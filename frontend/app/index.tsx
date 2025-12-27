@@ -322,10 +322,10 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   loginButton: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: '#14B8A6',
     borderRadius: 16,
     padding: 18,
-    shadowColor: '#3B82F6',
+    shadowColor: '#14B8A6',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,

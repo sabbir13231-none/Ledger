@@ -255,37 +255,19 @@ const styles = StyleSheet.create({
   heroSection: {
     paddingTop: 80,
     paddingHorizontal: 24,
-    paddingBottom: 48,
+    paddingBottom: 32,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
   },
-  logoContainer: {
-    marginBottom: 24,
-  },
-  logoCircle: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    backgroundColor: '#1E3A5F',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#1E3A5F',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-  appName: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#111827',
-    marginBottom: 8,
-    letterSpacing: -0.5,
+  logoImage: {
+    width: width * 0.6,
+    height: 120,
+    marginBottom: 16,
   },
   tagline: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#6B7280',
-    marginBottom: 24,
+    marginBottom: 16,
     textAlign: 'center',
   },
   badge: {
@@ -303,160 +285,186 @@ const styles = StyleSheet.create({
     color: '#047857',
   },
   
-  // Value Props
-  valuePropsSection: {
+  // Auth Section
+  authSection: {
     paddingHorizontal: 24,
-    paddingVertical: 32,
-    backgroundColor: '#F9FAFB',
-    gap: 16,
+    paddingVertical: 24,
   },
-  valuePropCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 24,
+  tabContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#F3F4F6',
+    borderRadius: 12,
+    padding: 4,
+    marginBottom: 24,
+  },
+  tab: {
+    flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    borderRadius: 8,
+    gap: 6,
+  },
+  tabActive: {
+    backgroundColor: '#FFFFFF',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
-    shadowRadius: 8,
+    shadowRadius: 2,
     elevation: 2,
   },
-  iconCircle: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  valuePropTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#111827',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  valuePropDescription: {
-    fontSize: 15,
+  tabText: {
+    fontSize: 14,
+    fontWeight: '600',
     color: '#6B7280',
-    textAlign: 'center',
-    lineHeight: 22,
+  },
+  tabTextActive: {
+    color: '#14B8A6',
   },
   
-  // Stats Banner
-  statsBanner: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#1E293B',
-    paddingVertical: 24,
-    paddingHorizontal: 16,
-    marginHorizontal: 24,
-    marginVertical: 32,
-    borderRadius: 16,
+  // Form Container
+  formContainer: {
+    backgroundColor: '#FFFFFF',
   },
-  statItem: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  statNumber: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: '#94A3B8',
-    textAlign: 'center',
-  },
-  statDivider: {
-    width: 1,
-    height: 40,
-    backgroundColor: '#334155',
-  },
-  
-  // Perfect For Section
-  perfectForSection: {
-    paddingHorizontal: 24,
-    paddingVertical: 32,
-  },
-  sectionTitle: {
+  formTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#111827',
-    marginBottom: 20,
-    textAlign: 'center',
+    color: '#1E3A5F',
+    marginBottom: 8,
   },
-  driverTypes: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 12,
-  },
-  driverType: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F3F4F6',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 24,
-    gap: 8,
-  },
-  driverTypeText: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#374151',
+  formDescription: {
+    fontSize: 14,
+    color: '#6B7280',
+    marginBottom: 24,
   },
   
-  // CTA Section
-  ctaSection: {
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    paddingBottom: 32,
+  // Input Fields
+  inputGroup: {
+    marginBottom: 16,
   },
-  loginButton: {
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
+    marginBottom: 8,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F9FAFB',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+  },
+  inputIcon: {
+    marginRight: 12,
+  },
+  input: {
+    flex: 1,
+    paddingVertical: 16,
+    fontSize: 16,
+    color: '#1F2937',
+  },
+  
+  // Buttons
+  googleButton: {
+    flexDirection: 'row',
     backgroundColor: '#14B8A6',
-    borderRadius: 16,
-    padding: 18,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
     shadowColor: '#14B8A6',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 6,
-  },
-  buttonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    shadowRadius: 8,
+    elevation: 4,
   },
   buttonIcon: {
     marginRight: 12,
   },
-  loginButtonText: {
+  googleButtonText: {
     color: '#FFFFFF',
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '700',
-    letterSpacing: 0.3,
   },
-  privacyText: {
+  actionButton: {
+    backgroundColor: '#14B8A6',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    shadowColor: '#14B8A6',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  actionButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  secondaryButton: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 2,
+    borderColor: '#14B8A6',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+  },
+  secondaryButtonText: {
+    color: '#14B8A6',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  forgotPassword: {
+    alignSelf: 'flex-end',
+    marginBottom: 24,
+  },
+  forgotPasswordText: {
+    color: '#14B8A6',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  resendButton: {
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  resendButtonText: {
+    color: '#14B8A6',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  
+  // Divider
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 24,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#E5E7EB',
+  },
+  dividerText: {
+    marginHorizontal: 16,
     fontSize: 14,
     color: '#9CA3AF',
-    textAlign: 'center',
-    marginTop: 16,
   },
   
   // Footer
   footer: {
     paddingHorizontal: 24,
-    paddingVertical: 32,
-    borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    paddingVertical: 24,
+    alignItems: 'center',
   },
   footerText: {
-    fontSize: 13,
+    fontSize: 12,
     color: '#9CA3AF',
     textAlign: 'center',
-    lineHeight: 20,
+    lineHeight: 18,
   },
 });

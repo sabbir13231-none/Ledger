@@ -1,8 +1,11 @@
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView, Dimensions } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+
+const { width } = Dimensions.get('window');
 
 export default function LoginScreen() {
   const { user, loading, login } = useAuth();
@@ -16,44 +19,126 @@ export default function LoginScreen() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#3B82F6" />
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Ionicons name="car-sport" size={80} color="#3B82F6" />
-        <Text style={styles.title}>Mileage Tracker</Text>
-        <Text style={styles.subtitle}>Track miles, save on taxes</Text>
-        
-        <View style={styles.features}>
-          <View style={styles.feature}>
-            <Ionicons name="navigate" size={24} color="#3B82F6" />
-            <Text style={styles.featureText}>Automatic GPS tracking</Text>
-          </View>
-          <View style={styles.feature}>
-            <Ionicons name="receipt" size={24} color="#3B82F6" />
-            <Text style={styles.featureText}>Expense management</Text>
-          </View>
-          <View style={styles.feature}>
-            <Ionicons name="document-text" size={24} color="#3B82F6" />
-            <Text style={styles.featureText}>IRS-compliant reports</Text>
+    <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
+      {/* Hero Section */}
+      <View style={styles.heroSection}>
+        <View style={styles.logoContainer}>
+          <View style={styles.logoCircle}>
+            <Ionicons name="book" size={48} color="#fff" />
           </View>
         </View>
+        
+        <Text style={styles.appName}>Driver Ledger</Text>
+        <Text style={styles.tagline}>Your Smart Mileage & Expense Companion</Text>
+        
+        <View style={styles.badge}>
+          <Ionicons name="trending-up" size={16} color="#10B981" />
+          <Text style={styles.badgeText}>IRS Compliant • $0.67/mile</Text>
+        </View>
+      </View>
 
+      {/* Value Props */}
+      <View style={styles.valuePropsSection}>
+        <View style={styles.valuePropCard}>
+          <View style={[styles.iconCircle, { backgroundColor: '#DBEAFE' }]}>
+            <Ionicons name="location" size={28} color="#3B82F6" />
+          </View>
+          <Text style={styles.valuePropTitle}>Auto-Track Miles</Text>
+          <Text style={styles.valuePropDescription}>
+            Background GPS tracking records every business trip automatically
+          </Text>
+        </View>
+
+        <View style={styles.valuePropCard}>
+          <View style={[styles.iconCircle, { backgroundColor: '#D1FAE5' }]}>
+            <Ionicons name="receipt" size={28} color="#10B981" />
+          </View>
+          <Text style={styles.valuePropTitle}>Snap & Save</Text>
+          <Text style={styles.valuePropDescription}>
+            Capture receipts instantly with your camera for easy expense tracking
+          </Text>
+        </View>
+
+        <View style={styles.valuePropCard}>
+          <View style={[styles.iconCircle, { backgroundColor: '#FEF3C7' }]}>
+            <Ionicons name="document-text" size={28} color="#F59E0B" />
+          </View>
+          <Text style={styles.valuePropTitle}>Tax Reports</Text>
+          <Text style={styles.valuePropDescription}>
+            Generate IRS-ready reports in seconds for maximum deductions
+          </Text>
+        </View>
+      </View>
+
+      {/* Stats Banner */}
+      <View style={styles.statsBanner}>
+        <View style={styles.statItem}>
+          <Text style={styles.statNumber}>$12K+</Text>
+          <Text style={styles.statLabel}>Avg. Yearly Savings</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statItem}>
+          <Text style={styles.statNumber}>100%</Text>
+          <Text style={styles.statLabel}>IRS Compliant</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statItem}>
+          <Text style={styles.statNumber}>24/7</Text>
+          <Text style={styles.statLabel}>Auto Tracking</Text>
+        </View>
+      </View>
+
+      {/* Perfect For Section */}
+      <View style={styles.perfectForSection}>
+        <Text style={styles.sectionTitle}>Perfect For</Text>
+        <View style={styles.driverTypes}>
+          <View style={styles.driverType}>
+            <Ionicons name="car" size={20} color="#3B82F6" />
+            <Text style={styles.driverTypeText}>Rideshare</Text>
+          </View>
+          <View style={styles.driverType}>
+            <Ionicons name="bicycle" size={20} color="#10B981" />
+            <Text style={styles.driverTypeText}>Delivery</Text>
+          </View>
+          <View style={styles.driverType}>
+            <Ionicons name="bus" size={20} color="#F59E0B" />
+            <Text style={styles.driverTypeText}>Taxi</Text>
+          </View>
+          <View style={styles.driverType}>
+            <Ionicons name="briefcase" size={20} color="#8B5CF6" />
+            <Text style={styles.driverTypeText}>Contractors</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* CTA Button */}
+      <View style={styles.ctaSection}>
         <TouchableOpacity style={styles.loginButton} onPress={login}>
-          <Ionicons name="logo-google" size={20} color="#fff" style={styles.buttonIcon} />
-          <Text style={styles.loginButtonText}>Continue with Google</Text>
+          <View style={styles.buttonContent}>
+            <Ionicons name="logo-google" size={22} color="#fff" style={styles.buttonIcon} />
+            <Text style={styles.loginButtonText}>Get Started with Google</Text>
+          </View>
         </TouchableOpacity>
         
-        <Text style={styles.disclaimer}>
-          For rideshare, taxi, and delivery drivers
+        <Text style={styles.privacyText}>
+          Free to start • No credit card required
         </Text>
       </View>
-    </View>
+
+      {/* Footer */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>
+          Made for independent drivers to maximize tax deductions
+        </Text>
+      </View>
+    </ScrollView>
   );
 }
 

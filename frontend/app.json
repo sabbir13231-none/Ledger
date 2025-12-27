@@ -40,6 +40,20 @@
           "resizeMode": "contain",
           "backgroundColor": "#000"
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow this app to use your location in the background to automatically track business mileage for tax purposes.",
+          "locationWhenInUsePermission": "Allow this app to use your location to track your business mileage for tax deductions."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow this app to access your photos to attach receipts to expenses.",
+          "cameraPermission": "Allow this app to use your camera to capture receipt photos."
+        }
       ]
     ],
     "experiments": {

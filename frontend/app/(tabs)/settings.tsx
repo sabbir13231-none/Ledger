@@ -9,7 +9,7 @@ import Constants from 'expo-constants';
 const BACKEND_URL = Constants.expoConfig?.extra?.EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL || '';
 
 export default function SettingsScreen() {
-  const { user, logout } = useAuth();
+  const { user, logout, sessionToken } = useAuth();
   const router = useRouter();
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [subscription, setSubscription] = useState<any>(null);

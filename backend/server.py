@@ -616,17 +616,80 @@ async def get_tax_report(
 # Subscription (mock)
 @api_router.get("/subscription/status", response_model=SubscriptionStatus)
 async def get_subscription_status(current_user: User = Depends(require_auth)):
-    # Mock pro subscription for testing
+    # Mock premium subscription for testing
+    # In production, check actual subscription from database
     return SubscriptionStatus(
-        plan_type="pro",
+        plan_type="premium",
         is_active=True,
         features=[
             "Automatic GPS tracking",
-            "Unlimited expenses",
-            "Tax reports (PDF/CSV)",
-            "Multiple vehicles"
+            "Unlimited manual entries",
+            "Unlimited expenses with receipts",
+            "Advanced tax reports (PDF/CSV)",
+            "Multiple vehicles",
+            "Priority support",
+            "Cloud backup"
         ]
     )
+
+@api_router.get("/subscription/plans")
+async def get_subscription_plans():
+    return {
+        "plans": [
+            {
+                "id": "basic",
+                "name": "Basic",
+                "price": 0,
+                "interval": "forever",
+                "features": [
+                    "Manual mileage tracking",
+                    "Basic expense tracking",
+                    "Simple reports",
+                    "1 vehicle"
+                ],
+                "limitations": [
+                    "No automatic GPS tracking",
+                    "No receipt photos",
+                    "No PDF/CSV export"
+                ]
+            },
+            {
+                "id": "mid",
+                "name": "Mid-Tier",
+                "price": 4.99,
+                "interval": "month",
+                "popular": True,
+                "features": [
+                    "Automatic GPS tracking",
+                    "Unlimited manual entries",
+                    "Expense tracking with receipts",
+                    "Basic tax reports",
+                    "Up to 3 vehicles",
+                    "Email support"
+                ],
+                "limitations": [
+                    "No PDF/CSV export",
+                    "No cloud backup"
+                ]
+            },
+            {
+                "id": "premium",
+                "name": "Premium",
+                "price": 12.99,
+                "interval": "month",
+                "features": [
+                    "Everything in Mid-Tier",
+                    "Advanced tax reports (PDF/CSV)",
+                    "Unlimited vehicles",
+                    "Priority support",
+                    "Cloud backup",
+                    "Advanced analytics",
+                    "Multi-device sync"
+                ],
+                "limitations": []
+            }
+        ]
+    }
 
 # Include the router in the main app
 app.include_router(api_router)

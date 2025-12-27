@@ -1,13 +1,18 @@
 {
   "expo": {
-    "name": "Driver Ledger",
-    "slug": "driver-ledger",
+    "name": "1099 Ledger",
+    "slug": "1099-ledger",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "frontend",
+    "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1E3A5F"
+    },
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -21,9 +26,8 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#000"
-      },
-      "edgeToEdgeEnabled": true
+        "backgroundColor": "#1E3A5F"
+      }
     },
     "web": {
       "bundler": "metro",
@@ -38,7 +42,7 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#000"
+          "backgroundColor": "#1E3A5F"
         }
       ],
       [

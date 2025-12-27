@@ -34,10 +34,10 @@ export default function SettingsScreen() {
     try {
       const [vehiclesRes, subscriptionRes] = await Promise.all([
         axios.get(`${BACKEND_URL}/api/vehicles`, {
-          headers: { Authorization: `Bearer ${user?.user_id}` }
+          headers: { Authorization: `Bearer ${sessionToken}` }
         }),
         axios.get(`${BACKEND_URL}/api/subscription/status`, {
-          headers: { Authorization: `Bearer ${user?.user_id}` }
+          headers: { Authorization: `Bearer ${sessionToken}` }
         })
       ]);
       setVehicles(vehiclesRes.data);

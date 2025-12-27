@@ -24,10 +24,10 @@ interface ColorScheme {
 const lightColors: ColorScheme = {
   background: '#FFFFFF',
   card: '#FFFFFF',
-  text: '#111827',
+  text: '#1E3A5F',
   textSecondary: '#6B7280',
   border: '#E5E7EB',
-  primary: '#3B82F6',
+  primary: '#14B8A6',
   success: '#10B981',
   warning: '#F59E0B',
   danger: '#EF4444',
@@ -35,16 +35,16 @@ const lightColors: ColorScheme = {
 };
 
 const darkColors: ColorScheme = {
-  background: '#111827',
-  card: '#1F2937',
+  background: '#0F172A',
+  card: '#1E293B',
   text: '#F9FAFB',
-  textSecondary: '#9CA3AF',
-  border: '#374151',
-  primary: '#60A5FA',
+  textSecondary: '#94A3B8',
+  border: '#334155',
+  primary: '#14B8A6',
   success: '#34D399',
   warning: '#FBBF24',
   danger: '#F87171',
-  inactive: '#6B7280',
+  inactive: '#64748B',
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);

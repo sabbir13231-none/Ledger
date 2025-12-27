@@ -114,7 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async () => {
     try {
       const redirectUrl = Platform.OS === 'web'
-        ? `${BACKEND_URL}/`
+        ? window.location.origin + '/'
         : Linking.createURL('/');
       
       const authUrl = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;

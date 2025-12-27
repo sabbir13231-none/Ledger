@@ -35,8 +35,8 @@ export default function LoginScreen() {
           </View>
         </View>
         
-        <Text style={styles.appName}>Driver Ledger</Text>
-        <Text style={styles.tagline}>Your Smart Mileage & Expense Companion</Text>
+        <Text style={styles.appName}>1099 Ledger</Text>
+        <Text style={styles.tagline}>Smart Tax Tracking for 1099 Contractors</Text>
         
         <View style={styles.badge}>
           <Ionicons name="trending-up" size={16} color="#10B981" />

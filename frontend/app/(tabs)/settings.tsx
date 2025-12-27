@@ -64,7 +64,7 @@ export default function SettingsScreen() {
           business_percentage: parseInt(newVehicle.business_percentage),
         },
         {
-          headers: { Authorization: `Bearer ${user?.user_id}` }
+          headers: { Authorization: `Bearer ${sessionToken}` }
         }
       );
 

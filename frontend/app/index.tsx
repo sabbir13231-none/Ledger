@@ -145,62 +145,224 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: '#FFFFFF',
   },
-  content: {
+  scrollContent: {
+    flexGrow: 1,
+  },
+  loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
+    backgroundColor: '#FFFFFF',
   },
-  title: {
-    fontSize: 32,
+  
+  // Hero Section
+  heroSection: {
+    paddingTop: 80,
+    paddingHorizontal: 24,
+    paddingBottom: 48,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+  },
+  logoContainer: {
+    marginBottom: 24,
+  },
+  logoCircle: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    backgroundColor: '#3B82F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#3B82F6',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  appName: {
+    fontSize: 36,
     fontWeight: 'bold',
-    color: '#1F2937',
-    marginTop: 24,
+    color: '#111827',
+    marginBottom: 8,
+    letterSpacing: -0.5,
   },
-  subtitle: {
+  tagline: {
     fontSize: 18,
     color: '#6B7280',
-    marginTop: 8,
-    marginBottom: 48,
+    marginBottom: 24,
+    textAlign: 'center',
   },
-  features: {
-    width: '100%',
-    marginBottom: 48,
-  },
-  feature: {
+  badge: {
     flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#D1FAE5',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 6,
+  },
+  badgeText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#047857',
+  },
+  
+  // Value Props
+  valuePropsSection: {
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+    backgroundColor: '#F9FAFB',
+    gap: 16,
+  },
+  valuePropCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  iconCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
   },
-  featureText: {
-    fontSize: 16,
-    color: '#4B5563',
-    marginLeft: 12,
+  valuePropTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#111827',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  valuePropDescription: {
+    fontSize: 15,
+    color: '#6B7280',
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  
+  // Stats Banner
+  statsBanner: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#1E293B',
+    paddingVertical: 24,
+    paddingHorizontal: 16,
+    marginHorizontal: 24,
+    marginVertical: 32,
+    borderRadius: 16,
+  },
+  statItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  statNumber: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontSize: 12,
+    color: '#94A3B8',
+    textAlign: 'center',
+  },
+  statDivider: {
+    width: 1,
+    height: 40,
+    backgroundColor: '#334155',
+  },
+  
+  // Perfect For Section
+  perfectForSection: {
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#111827',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  driverTypes: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 12,
+  },
+  driverType: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F3F4F6',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 24,
+    gap: 8,
+  },
+  driverTypeText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#374151',
+  },
+  
+  // CTA Section
+  ctaSection: {
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    paddingBottom: 32,
   },
   loginButton: {
-    flexDirection: 'row',
     backgroundColor: '#3B82F6',
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 12,
+    borderRadius: 16,
+    padding: 18,
+    shadowColor: '#3B82F6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  buttonContent: {
+    flexDirection: 'row',
     alignItems: 'center',
-    width: '100%',
     justifyContent: 'center',
   },
   buttonIcon: {
-    marginRight: 8,
+    marginRight: 12,
   },
   loginButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
-  disclaimer: {
+  privacyText: {
     fontSize: 14,
     color: '#9CA3AF',
-    marginTop: 24,
     textAlign: 'center',
+    marginTop: 16,
+  },
+  
+  // Footer
+  footer: {
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
+  },
+  footerText: {
+    fontSize: 13,
+    color: '#9CA3AF',
+    textAlign: 'center',
+    lineHeight: 20,
   },
 });

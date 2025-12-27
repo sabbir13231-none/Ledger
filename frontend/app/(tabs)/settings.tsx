@@ -95,7 +95,7 @@ export default function SettingsScreen() {
           onPress: async () => {
             try {
               await axios.delete(`${BACKEND_URL}/api/vehicles/${vehicleId}`, {
-                headers: { Authorization: `Bearer ${user?.user_id}` }
+                headers: { Authorization: `Bearer ${sessionToken}` }
               });
               loadData();
             } catch (error) {

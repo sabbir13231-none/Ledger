@@ -1,69 +1,114 @@
+diff --git a/frontend/app/(tabs)/settings.tsx b/frontend/app/(tabs)/settings.tsx
+index ab31977..5e863c3 100644
+--- a/frontend/app/(tabs)/settings.tsx
++++ b/frontend/app/(tabs)/settings.tsx
+@@ -155,11 +155,12 @@ export default function SettingsScreen() {
+                     {subscription.is_active ? 'Active' : 'Inactive'}
+                   </Text>
+                 </View>
+-                <View style={[styles.statusBadge, subscription.is_active && styles.statusBadgeActive]}>
+-                  <Text style={[styles.statusBadgeText, subscription.is_active && styles.statusBadgeTextActive]}>
+-                    {subscription.is_active ? 'Active' : 'Inactive'}
+-                  </Text>
+-                </View>
++                <TouchableOpacity
++                  style={styles.upgradeButton}
++                  onPress={() => router.push('/(tabs)/subscription')}
++                >
++                  <Text style={styles.upgradeButtonText}>Change Plan</Text>
++                </TouchableOpacity>
+               </View>
+               <View style={styles.featuresList}>
+                 {subscription.features.map((feature: string, index: number) => (
+@@ -427,6 +428,17 @@ const styles = StyleSheet.create({
+   statusBadgeTextActive: {
+     color: '#10B981',
+   },
++  upgradeButton: {
++    backgroundColor: '#3B82F6',
++    paddingHorizontal: 16,
++    paddingVertical: 8,
++    borderRadius: 8,
++  },
++  upgradeButtonText: {
++    color: '#fff',
++    fontSize: 14,
++    fontWeight: '600',
++  },
+   featuresList: {
+     gap: 8,
+   },
 diff --git a/model.patch b/model.patch
-index d1c9a91..e69de29 100644
+index fcefb39..e69de29 100644
 --- a/model.patch
 +++ b/model.patch
-@@ -1,64 +0,0 @@
--diff --git a/frontend/.env b/frontend/.env
--index f61c3ff..4bc5928 100644
----- a/frontend/.env
--+++ b/frontend/.env
--@@ -1,5 +1,6 @@
-- EXPO_TUNNEL_SUBDOMAIN=taxitracker-15
-- EXPO_PACKAGER_HOSTNAME=https://taxitracker-15.preview.emergentagent.com
-- EXPO_PUBLIC_BACKEND_URL=https://taxitracker-15.preview.emergentagent.com
--+EXPO_PACKAGER_PROXY_URL=https://taxitracker-15.preview.emergentagent.com
-- EXPO_USE_FAST_RESOLVER="1"
-- METRO_CACHE_ROOT=/app/frontend/.metro-cache
--\ No newline at end of file
+@@ -1,69 +0,0 @@
 -diff --git a/model.patch b/model.patch
--index 9955a8a..e69de29 100644
+-index d1c9a91..e69de29 100644
 ---- a/model.patch
 -+++ b/model.patch
--@@ -1,47 +0,0 @@
---diff --git a/frontend/contexts/AuthContext.tsx b/frontend/contexts/AuthContext.tsx
---index 564af0d..299fad4 100644
------ a/frontend/contexts/AuthContext.tsx
---+++ b/frontend/contexts/AuthContext.tsx
---@@ -114,7 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
---   const login = async () => {
---     try {
---       const redirectUrl = Platform.OS === 'web'
----        ? `${BACKEND_URL}/`
---+        ? window.location.origin + '/'
---         : Linking.createURL('/');
---       
---       const authUrl = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+-@@ -1,64 +0,0 @@
+--diff --git a/frontend/.env b/frontend/.env
+--index f61c3ff..4bc5928 100644
+----- a/frontend/.env
+--+++ b/frontend/.env
+--@@ -1,5 +1,6 @@
+-- EXPO_TUNNEL_SUBDOMAIN=taxitracker-15
+-- EXPO_PACKAGER_HOSTNAME=https://taxitracker-15.preview.emergentagent.com
+-- EXPO_PUBLIC_BACKEND_URL=https://taxitracker-15.preview.emergentagent.com
+--+EXPO_PACKAGER_PROXY_URL=https://taxitracker-15.preview.emergentagent.com
+-- EXPO_USE_FAST_RESOLVER="1"
+-- METRO_CACHE_ROOT=/app/frontend/.metro-cache
+--\ No newline at end of file
 --diff --git a/model.patch b/model.patch
---index 26a70c0..e69de29 100644
+--index 9955a8a..e69de29 100644
 ----- a/model.patch
 --+++ b/model.patch
---@@ -1,29 +0,0 @@
+--@@ -1,47 +0,0 @@
+---diff --git a/frontend/contexts/AuthContext.tsx b/frontend/contexts/AuthContext.tsx
+---index 564af0d..299fad4 100644
+------ a/frontend/contexts/AuthContext.tsx
+---+++ b/frontend/contexts/AuthContext.tsx
+---@@ -114,7 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
+---   const login = async () => {
+---     try {
+---       const redirectUrl = Platform.OS === 'web'
+----        ? `${BACKEND_URL}/`
+---+        ? window.location.origin + '/'
+---         : Linking.createURL('/');
+---       
+---       const authUrl = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
 ---diff --git a/model.patch b/model.patch
----index 6e7e711..e69de29 100644
+---index 26a70c0..e69de29 100644
 ------ a/model.patch
 ---+++ b/model.patch
----@@ -1,24 +0,0 @@
+---@@ -1,29 +0,0 @@
 ----diff --git a/model.patch b/model.patch
-----index f6493fe..e69de29 100644
+----index 6e7e711..e69de29 100644
 ------- a/model.patch
 ----+++ b/model.patch
-----@@ -1,19 +0,0 @@
------diff --git a/backend/server.py b/backend/server.py
------index d33ea1a..0d81c0f 100644
--------- a/backend/server.py
------+++ b/backend/server.py
------@@ -45,6 +45,14 @@ app = FastAPI(lifespan=lifespan)
------ # Create a router with the /api prefix
------ api_router = APIRouter(prefix="/api")
------ 
------+# Add your routes to the router instead of directly to app
------+@api_router.get("/")
------+async def root():
------+    return {"message": "Mileage Tracker API", "status": "running"}
------+
------+@api_router.get("/health")
------+async def health_check():
------+    return {"status": "healthy", "database": "postgresql"}
------ # Configure logging
------ logging.basicConfig(
------     level=logging.INFO,
+----@@ -1,24 +0,0 @@
+-----diff --git a/model.patch b/model.patch
+-----index f6493fe..e69de29 100644
+-------- a/model.patch
+-----+++ b/model.patch
+-----@@ -1,19 +0,0 @@
+------diff --git a/backend/server.py b/backend/server.py
+------index d33ea1a..0d81c0f 100644
+--------- a/backend/server.py
+------+++ b/backend/server.py
+------@@ -45,6 +45,14 @@ app = FastAPI(lifespan=lifespan)
+------ # Create a router with the /api prefix
+------ api_router = APIRouter(prefix="/api")
+------ 
+------+# Add your routes to the router instead of directly to app
+------+@api_router.get("/")
+------+async def root():
+------+    return {"message": "Mileage Tracker API", "status": "running"}
+------+
+------+@api_router.get("/health")
+------+async def health_check():
+------+    return {"status": "healthy", "database": "postgresql"}
+------ # Configure logging
+------ logging.basicConfig(
+------     level=logging.INFO,

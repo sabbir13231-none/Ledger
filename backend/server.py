@@ -171,6 +171,8 @@ class SubscriptionStatus(BaseModel):
     plan_type: str
     is_active: bool
     features: List[str]
+    usage: Optional[dict] = None
+    limits: Optional[dict] = None
 
 # Database initialization
 async def init_db():

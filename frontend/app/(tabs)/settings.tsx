@@ -428,6 +428,17 @@ const styles = StyleSheet.create({
   statusBadgeTextActive: {
     color: '#10B981',
   },
+  upgradeButton: {
+    backgroundColor: '#3B82F6',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  upgradeButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
   featuresList: {
     gap: 8,
   },

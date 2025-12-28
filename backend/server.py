@@ -820,15 +820,17 @@ async def get_subscription_plans():
                 "price": 0,
                 "interval": "forever",
                 "features": [
-                    "Manual mileage tracking",
+                    "Manual mileage tracking (unlimited)",
+                    "20 automatic GPS trips per month",
                     "Basic expense tracking",
                     "Simple reports",
                     "1 vehicle"
                 ],
                 "limitations": [
-                    "No automatic GPS tracking",
+                    "Limited to 20 auto trips/month",
                     "No receipt photos",
-                    "No PDF/CSV export"
+                    "No PDF/CSV export",
+                    "No bank linking"
                 ]
             },
             {
@@ -838,16 +840,17 @@ async def get_subscription_plans():
                 "interval": "month",
                 "popular": True,
                 "features": [
-                    "Automatic GPS tracking",
-                    "Unlimited manual entries",
-                    "Expense tracking with receipts",
+                    "Everything in Basic",
+                    "Unlimited automatic GPS tracking",
+                    "Expense tracking with receipt photos",
                     "Basic tax reports",
                     "Up to 3 vehicles",
                     "Email support"
                 ],
                 "limitations": [
                     "No PDF/CSV export",
-                    "No cloud backup"
+                    "No bank linking",
+                    "No earnings tracking"
                 ]
             },
             {
@@ -857,11 +860,13 @@ async def get_subscription_plans():
                 "interval": "month",
                 "features": [
                     "Everything in Mid-Tier",
+                    "Unlimited bank account linking",
+                    "Automatic earnings tracking",
+                    "AI-powered expense categorization",
                     "Advanced tax reports (PDF/CSV)",
                     "Unlimited vehicles",
                     "Priority support",
                     "Cloud backup",
-                    "Advanced analytics",
                     "Multi-device sync"
                 ],
                 "limitations": []

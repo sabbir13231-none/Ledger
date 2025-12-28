@@ -640,24 +640,175 @@ async def get_tax_report(
             period_end=end
         )
 
-# Subscription (mock)
+# Subscription (real with usage tracking)
 @api_router.get("/subscription/status", response_model=SubscriptionStatus)
 async def get_subscription_status(current_user: User = Depends(require_auth)):
-    # Mock premium subscription for testing
-    # In production, check actual subscription from database
-    return SubscriptionStatus(
-        plan_type="premium",
-        is_active=True,
-        features=[
-            "Automatic GPS tracking",
-            "Unlimited manual entries",
-            "Unlimited expenses with receipts",
-            "Advanced tax reports (PDF/CSV)",
-            "Multiple vehicles",
-            "Priority support",
-            "Cloud backup"
-        ]
-    )
+    pool = await get_db_pool()
+    async with pool.acquire() as conn:
+        # Get or create subscription
+        subscription = await conn.fetchrow(
+            "SELECT * FROM subscriptions WHERE user_id = $1 AND status = 'active' ORDER BY created_at DESC LIMIT 1",
+            current_user.user_id
+        )
+        
+        # If no subscription, assign free basic plan
+        if not subscription:
+            subscription_id = f"sub_{uuid.uuid4().hex[:12]}"
+            await conn.execute(
+                "INSERT INTO subscriptions (subscription_id, user_id, plan_type, status) VALUES ($1, $2, $3, $4)",
+                subscription_id, current_user.user_id, "basic", "active"
+            )
+            plan_type = "basic"
+        else:
+            plan_type = subscription['plan_type']
+        
+        # Calculate usage for current month
+        now = datetime.now(timezone.utc)
+        month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        
+        auto_trips_count = await conn.fetchval(
+            "SELECT COUNT(*) FROM trips WHERE user_id = $1 AND is_automatic = TRUE AND created_at >= $2",
+            current_user.user_id, month_start
+        )
+        
+        bank_accounts_count = 0  # Will be implemented with Plaid
+        
+        # Define plan limits and features
+        plans = {
+            "basic": {
+                "features": [
+                    "Manual mileage tracking (unlimited)",
+                    "20 automatic GPS trips/month",
+                    "Basic expense tracking",
+                    "Simple reports",
+                    "1 vehicle"
+                ],
+                "limits": {
+                    "auto_trips_per_month": 20,
+                    "vehicles": 1,
+                    "bank_accounts": 0
+                }
+            },
+            "mid": {
+                "features": [
+                    "Everything in Basic",
+                    "Unlimited automatic GPS tracking",
+                    "Expense tracking with receipt photos",
+                    "Basic tax reports",
+                    "Up to 3 vehicles",
+                    "Email support"
+                ],
+                "limits": {
+                    "auto_trips_per_month": -1,  # unlimited
+                    "vehicles": 3,
+                    "bank_accounts": 0
+                }
+            },
+            "premium": {
+                "features": [
+                    "Everything in Mid-Tier",
+                    "Unlimited bank account linking",
+                    "Automatic earnings tracking",
+                    "AI-powered expense categorization",
+                    "Advanced tax reports (PDF/CSV)",
+                    "Unlimited vehicles",
+                    "Priority support",
+                    "Cloud backup"
+                ],
+                "limits": {
+                    "auto_trips_per_month": -1,  # unlimited
+                    "vehicles": -1,  # unlimited
+                    "bank_accounts": -1  # unlimited
+                }
+            }
+        }
+        
+        plan_config = plans.get(plan_type, plans["basic"])
+        
+        return SubscriptionStatus(
+            plan_type=plan_type,
+            is_active=True,
+            features=plan_config["features"],
+            usage={
+                "auto_trips_this_month": auto_trips_count,
+                "bank_accounts": bank_accounts_count
+            },
+            limits=plan_config["limits"]
+        )
+
+@api_router.post("/subscription/change-plan")
+async def change_subscription_plan(
+    plan_type: str,
+    current_user: User = Depends(require_auth)
+):
+    if plan_type not in ["basic", "mid", "premium"]:
+        raise HTTPException(status_code=400, detail="Invalid plan type")
+    
+    pool = await get_db_pool()
+    async with pool.acquire() as conn:
+        # Deactivate old subscriptions
+        await conn.execute(
+            "UPDATE subscriptions SET status = 'cancelled', end_date = NOW() WHERE user_id = $1 AND status = 'active'",
+            current_user.user_id
+        )
+        
+        # Create new subscription
+        subscription_id = f"sub_{uuid.uuid4().hex[:12]}"
+        await conn.execute(
+            "INSERT INTO subscriptions (subscription_id, user_id, plan_type, status) VALUES ($1, $2, $3, $4)",
+            subscription_id, current_user.user_id, plan_type, "active"
+        )
+        
+        return {"message": f"Subscription changed to {plan_type}", "plan_type": plan_type}
+
+@api_router.get("/subscription/check-limit")
+async def check_subscription_limit(
+    feature: str,
+    current_user: User = Depends(require_auth)
+):
+    """Check if user can use a feature based on their plan"""
+    pool = await get_db_pool()
+    async with pool.acquire() as conn:
+        subscription = await conn.fetchrow(
+            "SELECT plan_type FROM subscriptions WHERE user_id = $1 AND status = 'active' ORDER BY created_at DESC LIMIT 1",
+            current_user.user_id
+        )
+        
+        plan_type = subscription['plan_type'] if subscription else "basic"
+        
+        if feature == "auto_trip":
+            now = datetime.now(timezone.utc)
+            month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            
+            auto_trips_count = await conn.fetchval(
+                "SELECT COUNT(*) FROM trips WHERE user_id = $1 AND is_automatic = TRUE AND created_at >= $2",
+                current_user.user_id, month_start
+            )
+            
+            if plan_type == "basic":
+                limit = 20
+                can_use = auto_trips_count < limit
+                remaining = max(0, limit - auto_trips_count)
+            else:  # mid or premium
+                can_use = True
+                remaining = -1  # unlimited
+            
+            return {
+                "can_use": can_use,
+                "used": auto_trips_count,
+                "remaining": remaining,
+                "plan_type": plan_type
+            }
+        
+        elif feature == "bank_link":
+            can_use = plan_type == "premium"
+            return {
+                "can_use": can_use,
+                "plan_type": plan_type,
+                "message": "Bank linking is only available on Premium plan" if not can_use else "Available"
+            }
+        
+        return {"can_use": True, "plan_type": plan_type}
 
 @api_router.get("/subscription/plans")
 async def get_subscription_plans():

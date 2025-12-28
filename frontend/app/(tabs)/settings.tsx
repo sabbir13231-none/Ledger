@@ -155,11 +155,12 @@ export default function SettingsScreen() {
                     {subscription.is_active ? 'Active' : 'Inactive'}
                   </Text>
                 </View>
-                <View style={[styles.statusBadge, subscription.is_active && styles.statusBadgeActive]}>
-                  <Text style={[styles.statusBadgeText, subscription.is_active && styles.statusBadgeTextActive]}>
-                    {subscription.is_active ? 'Active' : 'Inactive'}
-                  </Text>
-                </View>
+                <TouchableOpacity
+                  style={styles.upgradeButton}
+                  onPress={() => router.push('/(tabs)/subscription')}
+                >
+                  <Text style={styles.upgradeButtonText}>Change Plan</Text>
+                </TouchableOpacity>
               </View>
               <View style={styles.featuresList}>
                 {subscription.features.map((feature: string, index: number) => (

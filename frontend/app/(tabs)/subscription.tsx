@@ -42,8 +42,27 @@ export default function SubscriptionScreen() {
     }
   };
 
-  const handleSelectPlan = (planId: string) => {
-    alert(`In production, this would open Apple In-App Purchase for the ${planId} plan`);
+  const handleSelectPlan = async (planId: string) => {
+    if (currentPlan?.plan_type === planId) {
+      alert('You are already on this plan');
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${BACKEND_URL}/api/subscription/change-plan?plan_type=${planId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${sessionToken}` }
+        }
+      );
+
+      alert(`Successfully switched to ${planId} plan!`);
+      loadPlans(); // Reload to show updated current plan
+    } catch (error) {
+      console.error('Failed to change plan:', error);
+      alert('Failed to change plan. Please try again.');
+    }
   };
 
   if (loading) {

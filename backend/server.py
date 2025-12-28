@@ -247,6 +247,19 @@ async def init_db():
             )
         ''')
         
+        await conn.execute('''
+            CREATE TABLE IF NOT EXISTS subscriptions (
+                id SERIAL PRIMARY KEY,
+                subscription_id VARCHAR(255) UNIQUE NOT NULL,
+                user_id VARCHAR(255) REFERENCES users(user_id) ON DELETE CASCADE,
+                plan_type VARCHAR(50) NOT NULL,
+                status VARCHAR(50) NOT NULL,
+                start_date TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                end_date TIMESTAMP WITH TIME ZONE,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+            )
+        ''')
+        
         logger.info("Database initialized successfully")
 
 # Authentication helpers
